@@ -1,11 +1,16 @@
-// State Management
+// State Management - قائمة القراء المعتمدين والمضمونين 100%
 const RECITERS = [
+  { id: 'ar.husary', name: 'محمود خليل الحصري (إذاعة القرآن)' },
+  { id: 'ar.minshawi', name: 'محمد صديق المنشاوي (إذاعة القرآن)' },
+  { id: 'ar.abdulbasitmurattal', name: 'عبد الباسط عبد الصمد (مرتل)' },
+  { id: 'ar.abdurrahmaansudais', name: 'عبد الرحمن السديس' },
   { id: 'ar.alafasy', name: 'مشاري راشد العفاسي' },
-  { id: 'ar.husary', name: 'محمود خليل الحصري' },
-  { id: 'ar.minshawi', name: 'محمد صديق المنشاوي' },
+  { id: 'ar.hudhaify', name: 'علي بن عبدالرحمن الحذيفي' },
   { id: 'ar.saoodshuraym', name: 'سعود الشريم' },
   { id: 'ar.mahermuaiqly', name: 'ماهر المعيقلي' },
-  { id: 'ar.shaatree', name: 'أبو بكر الشاطري' }
+  { id: 'ar.shaatree', name: 'أبو بكر الشاطري' },
+  { id: 'ar.muhammadayyoub', name: 'محمد أيوب' },
+  { id: 'ar.abdullahbasfar', name: 'عبد الله بصفر' }
 ];
 
 let surahs = [];
