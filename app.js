@@ -1,16 +1,23 @@
-// State Management - قائمة القراء المعتمدين والمضمونين 100%
+// State Management - قائمة القراء (العفاسي والمعيقلي في الأولوية)
 const RECITERS = [
+  { id: 'ar.alafasy', name: 'مشاري راشد العفاسي' },
+  { id: 'ar.mahermuaiqly', name: 'ماهر المعيقلي' },
   { id: 'ar.husary', name: 'محمود خليل الحصري (إذاعة القرآن)' },
-  { id: 'ar.minshawi', name: 'محمد صديق المنشاوي (إذاعة القرآن)' },
+  { id: 'ar.minshawi', name: 'محمد صديق المنشاوي' },
   { id: 'ar.abdulbasitmurattal', name: 'عبد الباسط عبد الصمد (مرتل)' },
   { id: 'ar.abdurrahmaansudais', name: 'عبد الرحمن السديس' },
-  { id: 'ar.alafasy', name: 'مشاري راشد العفاسي' },
   { id: 'ar.hudhaify', name: 'علي بن عبدالرحمن الحذيفي' },
   { id: 'ar.saoodshuraym', name: 'سعود الشريم' },
-  { id: 'ar.mahermuaiqly', name: 'ماهر المعيقلي' },
   { id: 'ar.shaatree', name: 'أبو بكر الشاطري' },
   { id: 'ar.muhammadayyoub', name: 'محمد أيوب' },
-  { id: 'ar.abdullahbasfar', name: 'عبد الله بصفر' }
+  { id: 'ar.abdullahbasfar', name: 'عبد الله بصفر' },
+  { id: 'ar.ahmedajamy', name: 'أحمد بن علي العجمي' },
+  { id: 'ar.hanirifai', name: 'هاني الرفاعي' },
+  { id: 'ar.aymansowaid', name: 'أيمن سويد' },
+  { id: 'ar.parhizgar', name: 'شهريار پرهيزكار' },
+  { id: 'ar.ibrahimakhdar', name: 'إبراهيم الأخضر' },
+  { id: 'ar.muhammadjibreel', name: 'محمد جبريل' },
+  { id: 'ar.yasserdosari', name: 'ياسر الدوسري' }
 ];
 
 let surahs = [];
@@ -98,7 +105,9 @@ async function loadSurah(surahNum, autoPlayAfterLoad = false) {
   closeSidebarDrawer();
 
   currentSurahTitle.innerText = currentSurah.name;
-  currentSurahInfo.innerText = `${currentSurah.englishName} • ${currentSurah.revelationType === 'Meccan' ? 'مكية' : 'مدنية'} • ${currentSurah.numberOfAyahs} آيات`;
+  
+  // إلغاء عرض وصف السورة (الإنجليزي، مكية/مدنية، وعدد الآيات)
+  currentSurahInfo.innerText = '';
   
   bismillahEl.classList.toggle('hidden', surahNum === 1 || surahNum === 9);
 
