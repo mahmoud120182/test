@@ -29,10 +29,10 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts: Cairo + Amiri Quran -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -65,11 +65,6 @@
           class="w-full bg-slate-800 border border-slate-700 text-sm rounded-lg pr-9 pl-4 py-2 focus:outline-none focus:border-emerald-500 text-slate-200"
         />
       </div>
-
-      <button id="toggle-translation" title="تبديل الترجمة" class="p-2 rounded-lg border border-slate-800 text-slate-400 hover:bg-slate-800 text-xs font-bold flex items-center gap-1">
-        <i data-lucide="languages" class="w-4 h-4"></i>
-        <span>EN</span>
-      </button>
     </div>
   </header>
 
@@ -79,7 +74,7 @@
     <!-- Sidebar Overlay / Backdrop (Mobile Only) -->
     <div id="sidebar-overlay" class="fixed inset-0 bg-slate-950/70 z-40 lg:hidden hidden transition-opacity duration-300"></div>
 
-    <!-- Sidebar: Auto-hiding Drawer on Mobile / Fixed Panel on Large Screens -->
+    <!-- Sidebar -->
     <aside id="sidebar" class="fixed inset-y-0 right-0 z-50 w-72 sm:w-80 bg-slate-900 border-l border-slate-800 flex flex-col transform translate-x-full lg:translate-x-0 lg:static lg:z-auto transition-transform duration-300 ease-in-out shrink-0">
       
       <!-- Drawer Mobile Header -->
@@ -103,7 +98,7 @@
       </div>
 
       <div id="surahs-list" class="overflow-y-auto flex-1 divide-y divide-slate-800/50 custom-scrollbar">
-        <!-- Dynamic Surahs loaded via JavaScript -->
+        <!-- Dynamic Surahs -->
       </div>
     </aside>
 
@@ -112,18 +107,18 @@
       
       <!-- Surah Header Banner -->
       <div class="relative overflow-hidden bg-gradient-to-br from-emerald-900/40 via-slate-800/50 to-slate-900 border border-emerald-500/20 rounded-2xl p-4 sm:p-8 text-center shadow-xl">
-        <h2 id="current-surah-title" class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-emerald-400 mb-2">
+        <h2 id="current-surah-title" class="font-quran text-3xl sm:text-4xl md:text-5xl font-bold text-emerald-400 mb-2">
           جاري التحميل...
         </h2>
         <p id="current-surah-info" class="text-slate-400 text-xs sm:text-sm"></p>
-        <div id="bismillah" class="font-serif text-xl sm:text-2xl text-emerald-300/80 mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-slate-700/50 hidden">
+        <div id="bismillah" class="font-quran text-xl sm:text-2xl text-emerald-300/80 mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-slate-700/50 hidden">
           بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ
         </div>
       </div>
 
       <!-- Ayahs Container -->
       <div id="ayahs-container" class="space-y-4">
-        <!-- Dynamic Ayahs rendered here -->
+        <!-- Dynamic Ayahs -->
       </div>
     </main>
   </div>

@@ -13,7 +13,6 @@ let currentSurah = null;
 let ayahsData = [];
 let activeAyahIndex = 0;
 let isPlaying = false;
-let showEnglish = false;
 
 const audio = new Audio();
 
@@ -91,30 +90,26 @@ async function loadSurah(surahNum, autoPlayAfterLoad = false) {
   currentSurah = surahs.find(s => s.number === surahNum);
   renderSurahsList(surahs);
 
-  // Auto-hide side panel on mobile after selecting a Surah
   closeSidebarDrawer();
 
   currentSurahTitle.innerText = currentSurah.name;
   currentSurahInfo.innerText = `${currentSurah.englishName} • ${currentSurah.revelationType === 'Meccan' ? 'مكية' : 'مدنية'} • ${currentSurah.numberOfAyahs} آيات`;
   
-  // Show Bismillah banner for all surahs except Al-Fatihah (1) and At-Tawbah (9)
   bismillahEl.classList.toggle('hidden', surahNum === 1 || surahNum === 9);
 
   ayahsContainerEl.innerHTML = '<div class="text-center py-12 text-slate-500">جاري تحميل الآيات...</div>';
 
   try {
     const reciter = reciterSelectEl.value;
-    const res = await fetch(`https://api.alquran.cloud/v1/surah/${surahNum}/editions/quran-uthmani,en.sahih,${reciter}`);
+    const res = await fetch(`https://api.alquran.cloud/v1/surah/${surahNum}/editions/quran-uthmani,${reciter}`);
     const data = await res.json();
 
     const arabic = data.data[0].ayahs;
-    const english = data.data[1].ayahs;
-    const audioItems = data.data[2].ayahs;
+    const audioItems = data.data[1].ayahs;
 
     ayahsData = arabic.map((a, i) => {
       let text = a.text;
 
-      // Clean duplicate Bismillah prefix from Ayah 1 text except for Surah 1 & 9
       if (surahNum !== 1 && surahNum !== 9 && a.numberInSurah === 1) {
         const bismillahPrefix = "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ";
         if (text.startsWith(bismillahPrefix)) {
@@ -126,7 +121,6 @@ async function loadSurah(surahNum, autoPlayAfterLoad = false) {
         number: a.numberInSurah,
         globalNumber: a.number,
         text: text,
-        translation: english[i]?.text || '',
         audio: audioItems[i]?.audio || ''
       };
     });
@@ -156,13 +150,12 @@ function renderAyahs() {
             <button onclick="playAyah(${idx})" class="p-2 rounded-lg hover:bg-slate-700 text-slate-400 hover:text-emerald-400" aria-label="تشغيل">
               <i data-lucide="${isActive && isPlaying ? 'pause' : 'play'}" class="w-4 h-4"></i>
             </button>
-            <button onclick="openTafsir(${a.globalNumber})" class="p-2 rounded-lg hover:bg-slate-700 text-slate-400" aria-label="التفسير">
+            <button onclick="openTafsir(${a.globalNumber})" class="p-2 rounded-lg hover:bg-slate-700 text-slate-400 hover:text-emerald-400" aria-label="التفسير">
               <i data-lucide="info" class="w-4 h-4"></i>
             </button>
           </div>
         </div>
-        <p class="font-serif text-xl sm:text-2xl md:text-3xl leading-loose text-slate-100 text-right mb-4">${a.text}</p>
-        ${showEnglish ? `<p class="text-slate-400 text-xs sm:text-sm dir-ltr text-left border-t border-slate-800/50 pt-3">${a.translation}</p>` : ''}
+        <p class="font-quran text-2xl sm:text-3xl md:text-4xl leading-loose text-slate-100 text-right mb-4">${a.text}</p>
       </div>
     `;
   }).join('');
@@ -187,7 +180,6 @@ function playAyah(index) {
 
   renderAyahs();
 
-  // Scroll active ayah into view
   document.getElementById(`ayah-${index}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
@@ -197,7 +189,6 @@ function updateAudioUI() {
   lucide.createIcons();
 }
 
-// Mobile Lock-Screen & Media Controls Integration
 function setupMediaSession() {
   if ('mediaSession' in navigator) {
     navigator.mediaSession.setActionHandler('play', () => {
@@ -240,7 +231,6 @@ function updateMediaSession() {
   }
 }
 
-// Side Panel / Drawer Logic
 function openSidebarDrawer() {
   sidebarEl.classList.remove('translate-x-full');
   sidebarOverlayEl.classList.remove('hidden');
@@ -277,12 +267,10 @@ function setupEventListeners() {
     updateMediaSession();
   });
 
-  // Automatic progression handler (Ayah -> Next Ayah -> Next Surah)
   audio.addEventListener('ended', () => {
     if (activeAyahIndex < ayahsData.length - 1) {
       playAyah(activeAyahIndex + 1);
     } else if (currentSurah && currentSurah.number < 114) {
-      // Reached end of current Surah, load and auto-play next Surah
       loadSurah(currentSurah.number + 1, true);
     } else {
       isPlaying = false;
@@ -315,11 +303,6 @@ function setupEventListeners() {
 
   searchInput.addEventListener('input', filterSurahs);
   mobileSearchInput.addEventListener('input', filterSurahs);
-
-  document.getElementById('toggle-translation').addEventListener('click', () => {
-    showEnglish = !showEnglish;
-    renderAyahs();
-  });
 
   document.getElementById('close-tafsir').addEventListener('click', () => {
     tafsirModal.classList.add('hidden');

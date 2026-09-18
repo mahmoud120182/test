@@ -1,4 +1,4 @@
-/* Custom Scrollbars */
+/* Custom Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
 }
@@ -16,6 +16,8 @@
   background: rgba(16, 185, 129, 0.5);
 }
 
-.font-serif {
-  font-family: 'Amiri', serif;
+/* Uthmani Quranic Font Integration */
+.font-quran {
+  font-family: 'Amiri Quran', serif;
+  line-height: 2.3;
 }
