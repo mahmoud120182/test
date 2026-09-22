@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#020617">
+  <title>إعدادات التطبيق - القرآن الكريم</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    (function () {
+      const t = localStorage.getItem('app_theme') || 'dark';
+      document.documentElement.classList.toggle('theme-light', t === 'light');
+    })();
+  </script>
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    html, body { overflow-x: hidden; }
+
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(15,23,42,0.6); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(51,65,85,0.8); border-radius: 9999px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(16,185,129,0.5); }
+
+    select option {
+      background-color: #1e293b !important;
+      color: #f1f5f9 !important;
+      padding: 6px;
+    }
+    select option:checked {
+      background-color: #10b981 !important;
+      color: #020617 !important;
+    }
+
+    input, select, textarea { font-size: 16px; }
+    @media (min-width: 640px) {
+      input, select, textarea { font-size: 14px; }
+    }
+
+    #active-downloads-panel button {
+      touch-action: manipulation;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ============ Light theme overrides ============ */
+    html.theme-light body {
+      background-color: #f1f5f9 !important;
+      color: #0f172a !important;
+    }
+    html.theme-light [class*="bg-slate-950"] { background-color: #f1f5f9 !important; }
+    html.theme-light [class*="bg-slate-900"] { background-color: #ffffff !important; }
+    html.theme-light [class*="bg-slate-800"] { background-color: #f1f5f9 !important; }
+
+    html.theme-light [class*="text-slate-100"],
+    html.theme-light [class*="text-slate-200"],
+    html.theme-light [class*="text-slate-300"] { color: #0f172a !important; }
+    html.theme-light [class*="text-slate-400"] { color: #475569 !important; }
+    html.theme-light [class*="text-slate-500"] { color: #64748b !important; }
+
+    html.theme-light [class*="border-slate-800"],
+    html.theme-light [class*="border-slate-700"],
+    html.theme-light [class*="border-slate-600"] { border-color: #cbd5e1 !important; }
+
+    html.theme-light select { color: #0f172a !important; }
+    html.theme-light select option {
+      background-color: #ffffff !important;
+      color: #0f172a !important;
+    }
+  </style>
+</head>
+<body id="settings-body" class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center p-2 sm:p-4 md:p-8 transition-colors duration-300">
+
+  <div id="settings-container" class="w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl p-3 sm:p-5 md:p-6 shadow-xl space-y-5 sm:space-y-6 transition-colors duration-300">
+
+    <!-- رأس الصفحة -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3 sm:pb-4">
+      <h1 class="text-base sm:text-xl font-bold flex items-center gap-2 text-emerald-400">
+        <i data-lucide="settings" class="w-5 h-5 sm:w-6 sm:h-6"></i> إعدادات التطبيق
+      </h1>
+      <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-slate-100 px-3 py-2 rounded-xl text-xs flex items-center justify-center gap-2 transition border border-slate-700 w-full sm:w-auto">
+        <i data-lucide="arrow-right" class="w-4 h-4"></i> العودة للرئيسية
+      </a>
+    </div>
+
+    <!-- قسم التنزيلات النشطة -->
+    <section id="active-downloads-panel" class="hidden bg-slate-800/40 border border-emerald-500/30 rounded-xl p-3 sm:p-4 space-y-2 sm:space-y-3">
+      <div class="flex items-center justify-between">
+        <h3 class="text-sm sm:text-base font-bold text-emerald-400 flex items-center gap-2">
+          <i data-lucide="download-cloud" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+          التنزيلات النشطة (<span id="active-downloads-count">0</span>)
+        </h3>
+        <button id="active-downloads-toggle" type="button" data-dl-action="toggle-collapse" class="p-1 rounded-lg hover:bg-slate-700/50 text-slate-400 hover:text-slate-200 transition cursor-pointer select-none" title="طي / عرض">
+          <i data-lucide="chevron-down" class="w-4 h-4 transition-transform pointer-events-none" id="active-downloads-toggle-icon"></i>
+        </button>
+      </div>
+      <div id="active-downloads-list" class="space-y-2"></div>
+    </section>
+
+    <!-- قسم تفاصيل التنزيلات وإدارة التخزين -->
+    <div class="space-y-3 sm:space-y-4">
+      <h2 class="text-sm sm:text-lg font-semibold flex items-center gap-2 text-slate-100">
+        <i data-lucide="database" class="w-4 h-4 sm:w-5 sm:h-5 text-teal-400"></i> تفاصيل التنزيلات والتخزين المحلي
+      </h2>
+
+      <!-- بطاقة المساحة فقط -->
+      <div class="bg-slate-800/80 p-3 sm:p-4 rounded-xl border border-slate-700 text-center space-y-1 sm:space-y-2">
+        <div class="text-xs sm:text-sm text-slate-300">إجمالي المساحة المستخدمة</div>
+        <div id="storage-size" class="text-lg sm:text-2xl font-bold text-teal-300">جاري الحساب...</div>
+      </div>
+
+      <!-- إدارة حسب القارئ -->
+      <div class="bg-slate-800/40 border border-slate-700 rounded-xl p-3 sm:p-4 space-y-2 sm:space-y-3">
+        <h3 class="text-xs sm:text-sm font-bold text-slate-100 flex items-center gap-2">
+          <i data-lucide="users" class="w-4 h-4 text-emerald-400"></i>
+          إدارة التنزيلات حسب القارئ
+        </h3>
+        <p class="text-[11px] sm:text-xs text-slate-300">القراء الذين لديهم تنزيلات على هذا الجهاز (كاملة أو جزئية).</p>
+        <div id="reciter-storage-list" class="space-y-2">
+          <div class="text-slate-400 text-xs py-2">جاري التحميل...</div>
+        </div>
+      </div>
+
+      <!-- تنزيل القرآن كاملاً -->
+      <div class="bg-slate-800/40 border border-slate-700 rounded-xl p-3 sm:p-4 space-y-3">
+        <h3 class="text-xs sm:text-sm font-bold text-slate-100 flex items-center gap-2">
+          <i data-lucide="cloud-download" class="w-4 h-4 text-emerald-400"></i>
+          تنزيل القرآن الكريم كاملاً
+        </h3>
+
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
+          <label class="text-xs sm:text-sm text-slate-200 sm:shrink-0">اختر القارئ:</label>
+          <select id="bulk-reciter-select" class="w-full sm:flex-1 bg-slate-900 border border-slate-600 text-slate-100 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500 cursor-pointer">
+          </select>
+        </div>
+
+        <div class="flex items-center justify-between bg-slate-900/70 border border-slate-700 rounded-lg px-3 py-2">
+          <span class="text-[11px] sm:text-xs text-slate-300 flex items-center gap-1">
+            <i data-lucide="hard-drive" class="w-3.5 h-3.5 text-teal-400"></i>
+            الحجم التقريبي:
+          </span>
+          <span id="estimated-size" class="text-xs sm:text-sm font-bold text-amber-300">جاري الحساب...</span>
+        </div>
+
+        <button id="download-all-quran" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 rounded-xl transition flex items-center justify-center gap-2 text-xs sm:text-sm shadow-md">
+          <i data-lucide="download-cloud" class="w-4 h-4"></i> تنزيل القرآن كاملاً لهذا القارئ
+        </button>
+
+        <div id="selected-reciter-status" class="hidden bg-sky-500/10 border border-sky-500/30 rounded-lg p-2 text-[11px] sm:text-xs text-sky-300 leading-relaxed"></div>
+
+        <p class="text-[11px] sm:text-xs text-amber-300 bg-amber-500/10 border border-amber-500/30 rounded-lg p-2 leading-relaxed">
+          ⚠️ التنزيل الكامل قد يستغرق وقتاً طويلاً. يمكنك الإيقاف المؤقت ثم الاستئناف، أو الإلغاء في أي وقت (سيُحفظ ما تم تنزيله). التنزيل يستمر حتى لو غادرت الصفحة.
+        </p>
+      </div>
+
+      <button id="clear-all-storage" class="w-full bg-red-500/10 hover:bg-red-500/20 text-red-300 border border-red-500/30 font-bold py-3 rounded-xl transition flex items-center justify-center gap-2 text-xs sm:text-sm">
+        <i data-lucide="trash-2" class="w-4 h-4"></i> حذف جميع التنزيلات والبيانات المخزنة
+      </button>
+    </div>
+
+    <!-- قسم المظهر -->
+    <div class="space-y-4 pt-4 border-t border-slate-800">
+      <h2 class="text-sm sm:text-lg font-semibold flex items-center gap-2 text-slate-100">
+        <i data-lucide="palette" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> إعدادات المظهر
+      </h2>
+
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 bg-slate-800/50 p-3 sm:p-4 rounded-xl border border-slate-700">
+        <span class="text-xs sm:text-sm text-slate-200">الوضع العام (الثيم)</span>
+        <select id="theme-select" class="w-full sm:w-auto bg-slate-900 border border-slate-600 text-slate-100 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500 cursor-pointer">
+          <option value="dark">الوضع الداكن (Dark)</option>
+          <option value="light">الوضع الفاتح (Light)</option>
+        </select>
+      </div>
+
+      <button id="save-appearance" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 rounded-xl transition text-xs sm:text-sm shadow-md">
+        حفظ وتطبيق المظهر
+      </button>
+    </div>
+
+  </div>
+
+  <script src="bulk-downloader.js"></script>
+  <script src="settings.js"></script>
+</body>
+</html>

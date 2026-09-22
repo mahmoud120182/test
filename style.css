@@ -1,23 +1,84 @@
-/* Custom Scrollbar */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
+/* Scrollbars */
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(51, 65, 85, 0.8); border-radius: 9999px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(16, 185, 129, 0.5); }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
+::-webkit-scrollbar-thumb { background: rgba(51, 65, 85, 0.85); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(16, 185, 129, 0.55); }
+
+/* Quran font */
+.font-quran { font-family: 'Amiri Quran', serif; line-height: 2.3; }
+
+/* Select option colors (default dark) */
+select option {
+  background-color: #1e293b !important;
+  color: #f1f5f9 !important;
+  padding: 6px;
+}
+select option:checked {
+  background-color: #10b981 !important;
+  color: #020617 !important;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.6);
+/* =====================================================
+   Light Theme Overrides (when html.theme-light is set)
+   ===================================================== */
+html.theme-light body {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+html.theme-light header {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  border-color: #cbd5e1 !important;
+}
+html.theme-light footer {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  border-color: #cbd5e1 !important;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(51, 65, 85, 0.8);
-  border-radius: 9999px;
-}
+/* Backgrounds */
+html.theme-light [class*="bg-slate-950"] { background-color: #f1f5f9 !important; }
+html.theme-light [class*="bg-slate-900"] { background-color: #ffffff !important; }
+html.theme-light [class*="bg-slate-800"] { background-color: #f1f5f9 !important; }
+html.theme-light [class*="bg-emerald-950"] { background-color: rgba(16, 185, 129, 0.12) !important; }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(16, 185, 129, 0.5);
-}
+/* Text */
+html.theme-light [class*="text-slate-100"],
+html.theme-light [class*="text-slate-200"],
+html.theme-light [class*="text-slate-300"] { color: #0f172a !important; }
+html.theme-light [class*="text-slate-400"] { color: #475569 !important; }
+html.theme-light [class*="text-slate-500"] { color: #64748b !important; }
 
-/* Uthmani Quranic Font Integration */
-.font-quran {
-  font-family: 'Amiri Quran', serif;
-  line-height: 2.3;
+/* Borders */
+html.theme-light [class*="border-slate-800"],
+html.theme-light [class*="border-slate-700"],
+html.theme-light [class*="border-slate-600"] { border-color: #cbd5e1 !important; }
+
+/* Selects in light mode */
+html.theme-light select { color: #0f172a !important; }
+html.theme-light select option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+/* لوحة التنزيلات في الوضع الفاتح */
+html.theme-light #active-downloads-panel {
+  background-color: #ffffff !important;
+  border-color: #10b981 !important;
+}
+html.theme-light #active-downloads-panel .bg-slate-800\/60 {
+  background-color: #f1f5f9 !important;
+}
+html.theme-light #active-downloads-panel [class*="border-slate-800"],
+html.theme-light #active-downloads-panel [class*="border-slate-700"] {
+  border-color: #cbd5e1 !important;
+}
+html.theme-light #active-downloads-panel [class*="text-slate-100"],
+html.theme-light #active-downloads-panel [class*="text-slate-300"] {
+  color: #0f172a !important;
+}
+html.theme-light #active-downloads-panel .bg-slate-900 {
+  background-color: #e2e8f0 !important;
 }

@@ -1,178 +1,232 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="dark">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>القرآن الكريم - القراءة والاستماع</title>
-
-  <!-- Tailwind CSS CDN -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#020617">
+  <title>القرآن الكريم - التلاوة والتفسير</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            emerald: {
-              400: '#34d399',
-              500: '#10b981',
-              600: '#059669',
-              900: '#064e3b',
-              950: '#022c22'
-            }
-          }
-        }
-      }
-    }
-  </script>
-
-  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    (function () {
+      const t = localStorage.getItem('app_theme') || 'dark';
+      document.documentElement.classList.toggle('theme-light', t === 'light');
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap');
+    body {
+      font-family: 'Tajawal', sans-serif;
+    }
+    .font-quran {
+      font-family: 'Amiri', serif;
+    }
 
-  <!-- Google Fonts: Cairo + Amiri Quran -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    select option {
+      background-color: #1e293b !important;
+      color: #f1f5f9 !important;
+      padding: 6px;
+    }
+    select option:checked {
+      background-color: #10b981 !important;
+      color: #020617 !important;
+    }
 
-  <link rel="stylesheet" href="style.css" />
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: rgba(15,23,42,0.5); }
+    ::-webkit-scrollbar-thumb { background: rgba(51,65,85,0.85); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(16,185,129,0.55); }
+
+    select {
+      color: #f1f5f9;
+    }
+
+    #active-downloads-panel button {
+      touch-action: manipulation;
+    }
+
+    /* ============ Light theme overrides ============ */
+    html.theme-light body {
+      background-color: #f1f5f9 !important;
+      color: #0f172a !important;
+    }
+    html.theme-light header {
+      background-color: rgba(255, 255, 255, 0.92) !important;
+      border-color: #cbd5e1 !important;
+    }
+    html.theme-light footer {
+      background-color: rgba(255, 255, 255, 0.96) !important;
+      border-color: #cbd5e1 !important;
+    }
+    html.theme-light [class*="bg-slate-950"] { background-color: #f1f5f9 !important; }
+    html.theme-light [class*="bg-slate-900"] { background-color: #ffffff !important; }
+    html.theme-light [class*="bg-slate-800"] { background-color: #f1f5f9 !important; }
+    html.theme-light [class*="bg-emerald-950"] { background-color: rgba(16, 185, 129, 0.12) !important; }
+
+    html.theme-light [class*="text-slate-100"],
+    html.theme-light [class*="text-slate-200"],
+    html.theme-light [class*="text-slate-300"] { color: #0f172a !important; }
+    html.theme-light [class*="text-slate-400"] { color: #475569 !important; }
+    html.theme-light [class*="text-slate-500"] { color: #64748b !important; }
+
+    html.theme-light [class*="border-slate-800"],
+    html.theme-light [class*="border-slate-700"],
+    html.theme-light [class*="border-slate-600"] { border-color: #cbd5e1 !important; }
+
+    html.theme-light select { color: #0f172a !important; }
+    html.theme-light select option {
+      background-color: #ffffff !important;
+      color: #0f172a !important;
+    }
+  </style>
 </head>
-<body class="bg-slate-900 text-slate-100 font-['Cairo',sans-serif] h-screen flex flex-col overflow-hidden">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-emerald-500 selection:text-slate-950">
 
   <!-- Header -->
-  <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3 flex items-center justify-between shrink-0 z-30">
-    <div class="flex items-center gap-3">
-      <!-- Sidebar Toggle Button for Mobile -->
-      <button id="toggle-sidebar" class="lg:hidden p-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800 focus:outline-none" aria-label="قائمة السور">
-        <i data-lucide="menu" class="w-6 h-6"></i>
-      </button>
-
-      <div class="bg-emerald-500/10 p-2 rounded-xl text-emerald-400 border border-emerald-500/20">
-        <i data-lucide="book-open" class="w-6 h-6"></i>
+  <header class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <button id="toggle-sidebar" class="lg:hidden p-2 rounded-xl hover:bg-slate-800 text-slate-300 hover:text-emerald-400 transition" aria-label="القائمة">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        <div class="flex items-center gap-2">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg">
+            ق
+          </div>
+          <span class="font-bold text-lg tracking-wide bg-gradient-to-l from-emerald-400 to-teal-200 bg-clip-text text-transparent">القرآن الكريم</span>
+        </div>
       </div>
-      <h1 class="text-lg md:text-xl font-bold bg-gradient-to-r from-emerald-400 to-teal-200 bg-clip-text text-transparent">
-        القرآن الكريم
-      </h1>
-    </div>
 
-    <!-- Global Actions -->
-    <div class="flex items-center gap-2">
-      <div class="relative hidden sm:block w-48 md:w-60">
-        <i data-lucide="search" class="absolute right-3 top-2.5 w-4 h-4 text-slate-400"></i>
-        <input
-          id="search-input"
-          type="text"
-          placeholder="ابحث عن سورة..."
-          class="w-full bg-slate-800 border border-slate-700 text-sm rounded-lg pr-9 pl-4 py-2 focus:outline-none focus:border-emerald-500 text-slate-200"
-        />
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center gap-2 bg-slate-800/60 border border-slate-700/60 rounded-xl px-3 py-1.5">
+          <i data-lucide="mic" class="w-4 h-4 text-emerald-400"></i>
+          <select id="reciter-select" class="bg-transparent text-slate-200 text-sm focus:outline-none cursor-pointer">
+          </select>
+        </div>
+
+        <button onclick="window.location.href='settings.html'" class="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/60 text-slate-300 hover:text-emerald-400 transition shadow-sm" title="الإعدادات وإدارة التخزين">
+          <i data-lucide="settings" class="w-5 h-5"></i>
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- Main Content Layout -->
-  <div class="flex flex-1 overflow-hidden relative">
-    
-    <!-- Sidebar Overlay / Backdrop (Mobile Only) -->
-    <div id="sidebar-overlay" class="fixed inset-0 bg-slate-950/70 z-40 lg:hidden hidden transition-opacity duration-300"></div>
+  <!-- Main Layout -->
+  <div class="flex-1 max-w-7xl w-full mx-auto flex relative overflow-hidden">
 
     <!-- Sidebar -->
-    <aside id="sidebar" class="fixed inset-y-0 right-0 z-50 w-72 sm:w-80 bg-slate-900 border-l border-slate-800 flex flex-col transform translate-x-full lg:translate-x-0 lg:static lg:z-auto transition-transform duration-300 ease-in-out shrink-0">
-      
-      <!-- Drawer Mobile Header -->
-      <div class="p-4 border-b border-slate-800 flex items-center justify-between lg:hidden">
-        <span class="font-bold text-slate-200">فهرس السور</span>
-        <button id="close-sidebar" class="p-1 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800">
+    <aside id="sidebar" class="fixed lg:static inset-y-0 right-0 z-30 w-80 bg-slate-900 border-l border-slate-800 transform translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
+      <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+        <h2 class="font-bold text-slate-200 flex items-center gap-2">
+          <i data-lucide="book-open" class="w-4 h-4 text-emerald-400"></i> فهرس السور
+        </h2>
+        <button id="close-sidebar" class="lg:hidden p-1.5 rounded-lg hover:bg-slate-800 text-slate-400" aria-label="إغلاق">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
-      <div class="p-3 border-b border-slate-800 sm:hidden">
+      <div class="p-3 border-b border-slate-800/60">
         <div class="relative">
-          <i data-lucide="search" class="absolute right-3 top-2.5 w-4 h-4 text-slate-400"></i>
-          <input
-            id="mobile-search-input"
-            type="text"
-            placeholder="ابحث عن سورة..."
-            class="w-full bg-slate-800 border border-slate-700 text-sm rounded-lg pr-9 pl-4 py-2 text-slate-200"
-          />
+          <i data-lucide="search" class="absolute right-3 top-2.5 w-4 h-4 text-slate-500"></i>
+          <input id="search-input" type="text" placeholder="ابحث عن سورة..." class="w-full bg-slate-950 border border-slate-800 rounded-xl pr-9 pl-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 transition">
         </div>
       </div>
 
-      <div id="surahs-list" class="overflow-y-auto flex-1 divide-y divide-slate-800/50 custom-scrollbar">
-        <!-- Dynamic Surahs -->
-      </div>
+      <div id="surahs-list" class="flex-1 overflow-y-auto divide-y divide-slate-800/40"></div>
     </aside>
 
-    <!-- Main Quran Display -->
-    <main class="flex-1 overflow-y-auto p-3 sm:p-6 md:p-8 space-y-6 pb-36 md:pb-28 custom-scrollbar" id="quran-container">
-      
-      <!-- Surah Header Banner -->
-      <div class="relative overflow-hidden bg-gradient-to-br from-emerald-900/40 via-slate-800/50 to-slate-900 border border-emerald-500/20 rounded-2xl p-4 sm:p-8 text-center shadow-xl">
-        <h2 id="current-surah-title" class="font-quran text-3xl sm:text-4xl md:text-5xl font-bold text-emerald-400 mb-2">
-          جاري التحميل...
-        </h2>
-        <p id="current-surah-info" class="text-slate-400 text-xs sm:text-sm"></p>
-        <div id="bismillah" class="font-quran text-xl sm:text-2xl text-emerald-300/80 mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-slate-700/50 hidden">
-          بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ
+    <div id="sidebar-overlay" class="fixed inset-0 bg-slate-950/80 z-20 hidden lg:hidden backdrop-blur-sm"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col min-w-0 bg-slate-950 pb-32">
+
+      <!-- ======== قسم التنزيلات النشطة (داخل الصفحة) ======== -->
+      <section id="active-downloads-panel" class="hidden bg-slate-900/50 border-b border-slate-800">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 py-4">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm sm:text-base">
+              <i data-lucide="download-cloud" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+              التنزيلات النشطة (<span id="active-downloads-count">0</span>)
+            </div>
+            <button id="active-downloads-toggle" type="button" class="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition" title="طي / عرض">
+              <i data-lucide="chevron-down" class="w-4 h-4 transition-transform" id="active-downloads-toggle-icon"></i>
+            </button>
+          </div>
+          <div id="active-downloads-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
         </div>
+      </section>
+
+      <!-- Surah Header Banner -->
+      <div class="bg-gradient-to-b from-slate-900 to-slate-950 border-b border-slate-800/80 p-6 text-center relative">
+        <h1 id="current-surah-title" class="text-3xl font-bold font-quran text-emerald-400 mb-2">الفاتحة</h1>
+        <p id="current-surah-info" class="text-sm text-slate-400"></p>
+      </div>
+
+      <!-- Bismillah Banner -->
+      <div id="bismillah" class="my-6 text-center font-quran text-2xl text-emerald-300/90 hidden">
+        بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
       </div>
 
       <!-- Ayahs Container -->
-      <div id="ayahs-container" class="space-y-4">
-        <!-- Dynamic Ayahs -->
-      </div>
+      <div id="ayahs-container" class="max-w-4xl w-full mx-auto px-4 sm:px-6 space-y-4 pt-4"></div>
+
     </main>
   </div>
 
-  <!-- Sticky Audio Player Footer -->
-  <footer class="fixed bottom-0 left-0 right-0 z-30 bg-slate-900/95 backdrop-blur-lg border-t border-slate-800 px-4 py-3 shadow-2xl">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
-      
-      <!-- Reciter Selector & Info -->
-      <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-start">
-        <div class="flex items-center gap-3">
-          <div class="bg-emerald-500/10 p-2.5 rounded-xl border border-emerald-500/20 text-emerald-400 hidden sm:block">
-            <i data-lucide="mic" class="w-5 h-5"></i>
-          </div>
-          <select id="reciter-select" class="bg-slate-800 text-xs md:text-sm text-slate-200 border border-slate-700 rounded-lg px-2 py-1.5 focus:outline-none focus:border-emerald-500 max-w-[200px] sm:max-w-xs truncate">
-            <!-- Loaded dynamically from app.js -->
-          </select>
+  <!-- Audio Player Fixed Bottom Bar -->
+  <footer class="fixed bottom-0 inset-x-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 shadow-2xl py-3 px-4">
+    <div class="max-w-4xl mx-auto flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3 truncate">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0">
+          <i data-lucide="headphones" class="w-5 h-5"></i>
         </div>
-        <div id="audio-info" class="text-xs text-slate-400 truncate sm:block">اختر سورة للبدء</div>
+        <div class="truncate">
+          <div id="audio-info" class="text-sm font-bold text-slate-200 truncate">اختر سورة للبدء</div>
+          <div class="text-xs text-slate-400">التلاوة مستمرة أونلاين وأوفلاين</div>
+        </div>
       </div>
 
-      <!-- Playback Controls -->
-      <div class="flex items-center justify-center gap-6 w-full sm:w-auto">
-        <button id="prev-btn" class="text-slate-400 hover:text-slate-200 transition p-1">
-          <i data-lucide="skip-back" class="w-5 h-5"></i>
-        </button>
-
-        <button id="play-btn" class="w-11 h-11 bg-emerald-500 text-slate-950 rounded-full flex items-center justify-center shadow-lg hover:bg-emerald-400 transition shrink-0">
-          <i data-lucide="play" class="w-5 h-5 fill-current"></i>
-        </button>
-
-        <button id="next-btn" class="text-slate-400 hover:text-slate-200 transition p-1">
+      <div class="flex items-center gap-2">
+        <button id="prev-btn" class="p-2.5 rounded-xl hover:bg-slate-800 text-slate-300 hover:text-emerald-400 transition" title="الآية السابقة">
           <i data-lucide="skip-forward" class="w-5 h-5"></i>
         </button>
+        <button id="play-btn" class="w-12 h-12 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 flex items-center justify-center transition shadow-lg shadow-emerald-500/20" title="تشغيل / إيقاف">
+          <i data-lucide="play" class="w-5 h-5 fill-current"></i>
+        </button>
+        <button id="next-btn" class="p-2.5 rounded-xl hover:bg-slate-800 text-slate-300 hover:text-emerald-400 transition" title="الآية التالية">
+          <i data-lucide="skip-back" class="w-5 h-5"></i>
+        </button>
       </div>
-
     </div>
   </footer>
 
   <!-- Tafsir Modal -->
-  <div id="tafsir-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-    <div class="bg-slate-900 border border-slate-800 w-full max-w-2xl rounded-2xl p-5 sm:p-6 shadow-2xl max-h-[80vh] flex flex-col">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
-        <h3 id="tafsir-title" class="font-bold text-emerald-400 text-lg">تفسير الآية</h3>
-        <button id="close-tafsir" class="text-slate-400 hover:text-slate-200">
+  <div id="tafsir-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-emerald-400 flex items-center gap-2">
+          <i data-lucide="book-open" class="w-5 h-5"></i> التفسير الميسر
+        </h3>
+        <button id="close-tafsir" class="p-1 rounded-lg hover:bg-slate-800 text-slate-400">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
-      <div id="tafsir-content" class="text-slate-300 leading-relaxed overflow-y-auto text-sm sm:text-base">
-        جاري تحميل التفسير...
+      <div id="tafsir-content" class="text-slate-200 text-base leading-relaxed font-quran p-2">
+        جاري التحميل...
       </div>
     </div>
   </div>
 
+  <script src="bulk-downloader.js"></script>
   <script src="app.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedFontSize = localStorage.getItem('quran_font_size') || 'text-3xl';
+      window.applySavedFontSize = (el) => {
+        el.className = `font-quran ${savedFontSize} leading-loose text-slate-100 text-right mb-4`;
+      };
+    });
+  </script>
 </body>
 </html>
