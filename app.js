@@ -661,9 +661,6 @@ function handleBulkDone(summary) {
   if (window.lucide) lucide.createIcons();
   setTimeout(() => toast.remove(), 6000);
 
-  if ('Notification' in window && Notification.permission === 'granted') {
-    try { new Notification('القرآن الكريم', { body: msg }); } catch (e) {}
-  }
 }
 
 /* ---------- تهيئة اللوحة ---------- */

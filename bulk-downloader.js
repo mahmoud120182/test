@@ -258,9 +258,6 @@
       return { ...existing };
     }
 
-    if ('Notification' in window && Notification.permission === 'default') {
-      try { await Notification.requestPermission(); } catch (e) {}
-    }
     await openDB();
 
     const myToken = (tokens[reciterId] || 0) + 1;
