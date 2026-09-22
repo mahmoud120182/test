@@ -7,12 +7,17 @@
   <title>القرآن الكريم - التلاوة والتفسير</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script>
-    (function () {
+<script>
+  (function () {
+    const apply = function () {
       const t = localStorage.getItem('app_theme') || 'dark';
       document.documentElement.classList.toggle('theme-light', t === 'light');
-    })();
-  </script>
+    };
+    apply();
+    // إعادة التطبيق عند العودة من صفحة أخرى (bfcache)
+    window.addEventListener('pageshow', apply);
+  })();
+</script>
   <link rel="stylesheet" href="style.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap');

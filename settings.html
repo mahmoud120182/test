@@ -7,12 +7,16 @@
   <title>إعدادات التطبيق - القرآن الكريم</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script>
-    (function () {
+<script>
+  (function () {
+    const apply = function () {
       const t = localStorage.getItem('app_theme') || 'dark';
       document.documentElement.classList.toggle('theme-light', t === 'light');
-    })();
-  </script>
+    };
+    apply();
+    window.addEventListener('pageshow', apply);
+  })();
+</script>
   <style>
     * { -webkit-tap-highlight-color: transparent; }
     html, body { overflow-x: hidden; }

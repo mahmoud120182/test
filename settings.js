@@ -129,7 +129,6 @@ async function loadStorageStats() {
 
     const reciterGroups = {};
 
-    // 1) ملفات محفوظة على القرص
     for (const item of items) {
       const p = parseAudioKey(item.key);
       if (!p) continue;
@@ -141,7 +140,6 @@ async function loadStorageStats() {
       reciterGroups[p.reciterId].surahs.add(p.surahNum);
     }
 
-    // 2) تنزيلات نشطة (تُدمج في نفس القائمة)
     try {
       const activeStates = (typeof BulkDownloader !== 'undefined' && BulkDownloader.getAllStates)
         ? BulkDownloader.getAllStates()
@@ -156,13 +154,11 @@ async function loadStorageStats() {
       });
     } catch (e) { console.error('merge active states failed:', e); }
 
-    // إجمالي المساحة
     const totalBytes = items.reduce((acc, it) => acc + it.size, 0);
     const totalMB = (totalBytes / (1024 * 1024)).toFixed(2);
     const storageSizeEl = document.getElementById('storage-size');
     if (storageSizeEl) storageSizeEl.innerText = `${totalMB} ميجابايت`;
 
-    // عرض القراء
     const recitersArr = Object.values(reciterGroups).sort((a, b) => {
       if (a.isActive && !b.isActive) return -1;
       if (!a.isActive && b.isActive) return 1;
@@ -389,7 +385,6 @@ window.dlToggleCollapse = function () {
 
 window.deleteReciterFiles = async function (rid, rName, surahs, count) {
   try {
-    // إذا كان القارئ لديه تنزيل نشط، أوقفه أولاً
     if (typeof BulkDownloader !== 'undefined' && BulkDownloader.getState(rid)) {
       if (!confirm(`القارئ "${rName}" لديه تنزيل نشط.\nهل تريد إيقافه وحذف كل ملفاته؟`)) return;
       try { BulkDownloader.cancelDownload(rid); } catch (e) {}
@@ -413,7 +408,6 @@ window.deleteReciterFiles = async function (rid, rName, surahs, count) {
 function setupGlobalButtonHandlers() {
   let pending = null;
 
-  // نلتقط لحظة الضغط، ونحفظ معلومات الزر
   document.addEventListener('pointerdown', (e) => {
     const btn = e.target.closest('button[data-dl-action]');
     if (!btn) return;
@@ -428,7 +422,6 @@ function setupGlobalButtonHandlers() {
     };
   }, true);
 
-  // الإفلات: نتحقق أنه لم يكن سحباً ثم ننفذ
   document.addEventListener('pointerup', (e) => {
     if (!pending) return;
     const p = pending;
@@ -609,7 +602,7 @@ window.onload = async () => {
   try { lucide.createIcons(); } catch (e) { console.error(e); }
 
   attachBulkEvents();
-  setupGlobalButtonHandlers();   // <-- مهم
+  setupGlobalButtonHandlers();
 
   document.getElementById('bulk-reciter-select').addEventListener('change', () => {
     updateEstimatedSize();
@@ -628,3 +621,30 @@ window.onload = async () => {
   try { await BulkDownloader.resumeIfNeeded(); } catch (e) { console.error(e); }
   refreshAllUI();
 };
+
+/* =====================================================
+   إعادة التهيئة عند العودة إلى الصفحة من bfcache
+   ===================================================== */
+window.addEventListener('pageshow', async (e) => {
+  if (!e.persisted) return;
+
+  // 1) إعادة تطبيق الثيم
+  try {
+    const savedTheme = localStorage.getItem('app_theme') || 'dark';
+    const themeSelect = document.getElementById('theme-select');
+    if (themeSelect) themeSelect.value = savedTheme;
+    applyThemeSettings();
+  } catch (err) { console.error('pageshow theme:', err); }
+
+  // 2) إعادة تحميل الإحصائيات
+  try { await loadStorageStats(); } catch (err) { console.error('pageshow stats:', err); }
+
+  // 3) إعادة استئناف التنزيلات إن وُجدت + تحديث الواجهة
+  try {
+    if (typeof BulkDownloader !== 'undefined') {
+      await BulkDownloader.resumeIfNeeded();
+    }
+  } catch (err) { console.error('pageshow resume:', err); }
+
+  try { refreshAllUI(); } catch (err) { console.error('pageshow refresh:', err); }
+});

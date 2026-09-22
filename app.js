@@ -697,3 +697,14 @@ window.onload = async () => {
     console.error(e);
   }
 };
+
+// إعادة تطبيق الثيم عند العودة إلى الصفحة من bfcache
+window.addEventListener('pageshow', (e) => {
+  applyTheme();
+  // إذا كانت الصفحة محفوظة من قبل، أعد تحميل البيانات المتغيرة
+  if (e.persisted && typeof BulkDownloader !== 'undefined') {
+    try {
+      renderActiveDownloads();
+    } catch (err) { console.error(err); }
+  }
+});
